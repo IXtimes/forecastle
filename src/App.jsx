@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import WeatherForm from "./WeatherForm.jsx";
 import Card from "./Card.jsx";
-import ForcastleGame from './ForcastleGame.jsx';
+import ForecastleGame from './ForecastleGame.jsx';
 
 function App() {
   const [error, setError] = useState('');
