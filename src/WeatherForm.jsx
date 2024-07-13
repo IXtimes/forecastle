@@ -3,11 +3,11 @@ import { fromAddress, setKey } from 'react-geocode';
 
 function WeatherForm({ setWeatherData, setError, setGeocodeData}) {
     const [city, setCity] = useState('');
-    const apiKey = import.meta.env.REACT_APP_OPEN_WEATHER_API_KEY;
+    const apiKey = import.meta.env.VITE_OPEN_WEATHER_API_KEY;
 
     useEffect(() => {
         // Seed Google API key
-        setKey(import.meta.env.REACT_APP_GEOCODE_API_KEY);
+        setKey(import.meta.env.VITE_GEOCODE_API_KEY);
     }, [])
 
     async function SubmitFieldContent(e) {
