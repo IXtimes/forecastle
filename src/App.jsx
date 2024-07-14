@@ -10,9 +10,8 @@ function App() {
 
   return (
     <>
+      <h1>Forecastle</h1>
       <ForecastleGame/>
-      <WeatherForm setWeatherData={setWeatherData} setError={setError} setGeocodeData={setGeocodeData}/>
-      <Card weatherData={weatherData} error={error} geocodeData={geocodeData} />
     </>
   )
 }
