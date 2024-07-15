@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, forwardRef} from 'react';
 
-export default function ImageDropdown() {
-    const [selectedImage, setSelectedImage] = useState({ id: 1, url: 'images/atmosphere.png', label: 'Atmospheric' });
+export default forwardRef(({setSelected, active}, ref) => {
+    const [selectedImage, setSelectedImage] = useState('images/atmosphere.png');
 
     const images = [
         { id: 1, url: 'images/atmosphere.png', label: 'Atmospheric' },
@@ -16,16 +16,17 @@ export default function ImageDropdown() {
     ];
 
     useEffect(() => {
-        
-    })
+        handleSelectImage(images[0]);
+    }, [])
 
     const handleSelectImage = (image) => {
+        setSelected(image.label);
         setSelectedImage(image.url);
     };
 
     return (
-        <div>
-            <select onChange={(e) => handleSelectImage(images[e.target.selectedIndex])}>
+        <div ref={ref}>
+            <select onChange={(e) => active == "true" ? handleSelectImage(images[e.target.selectedIndex]) : ""} disabled={ active != "true" ? "true" : ''}>
                 {images.map((image) => (
                     <option key={image.id} value={image.id}>{image.label}</option>
                 ))}
@@ -33,4 +34,4 @@ export default function ImageDropdown() {
             {selectedImage && <img className="weatherImg" src={selectedImage} alt=""/>}
         </div>
     );
-}
+})

@@ -45,6 +45,11 @@ body {
   margin: 10px;
 }
 
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+}
+
 .weatherForm {
   margin: 20px;
 }
@@ -58,7 +63,7 @@ body {
   width: 300px;
 }
 
-button[type="submit"] {
+button {
   padding: 10px 20px;
   font-size: 2rem;
   background-color: hsl(122, 39%, 50%);
@@ -66,7 +71,7 @@ button[type="submit"] {
   border: none;
   border-radius: 5px;
 }
-button[type="submit"]:hover {
+button:hover {
   background-color: hsl(122, 39%, 40%);
 }
 
@@ -74,6 +79,7 @@ button[type="submit"]:hover {
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: center;
   text-align: center;
   height: 80vh;
 }
@@ -90,20 +96,53 @@ button[type="submit"]:hover {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  transition: ease 1s 0s;
+}
+
+.resultsBlock {
+  margin-top: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.horizontalCard {
+  background: linear-gradient(189deg, hsl(210, 100%, 75%), hsl(40, 100%, 75%));
+  padding: 30px;
+  margin: 10px;
+  box-shadow: 2px 2px 5px hsla(0, 0%, 0%, 0.5);
+  width: 90%;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  transition: ease 1s 0s;
+}
+.horizontalCard * {
+  color: white;
+}
+.horizontalCard #high *{
+  font-size: 4rem;
+}
+.horizontalCard #low *{
+  font-size: 3rem;
+}
+.scoreGrid {
+  font-size: 2rem;
 }
 
 .card .dataBox {
-  margin: 20px 0;
+  margin: 10px 0;
 }
 .card .dataBox * {
-  color: hsl(0, 0%, 95%);
+  color: white;
   font-size: 2.25rem;
 }
 .card #high *, .card #humid *, .card #precip *{
-  color: hsl(0, 0%, 95%);
+  color: hsl(0, 0%, 100%);
 }
 .card #low * {
-  color: hsl(0, 0%, 85%);
+  color: hsl(0, 0%, 93%);
 }
 
 .card .numBox {
@@ -113,23 +152,30 @@ button[type="submit"]:hover {
 .card .numBox input {
   background-color: transparent;
   border: none;
-  border-bottom: 2px solid;
   text-align: right;
-  width: 55%;
+  width: 50%;
+}
+.card .numBox input:not(:disabled) {
+  border-bottom: 2px solid;
 }
 .card #high input {
-  font-size: 4rem;
-  width: 45%;
+  font-size: 3.75rem;
+  width: 47%;
 }
 .card #low input {
-  font-size: 3.5rem;
-  width: 40%;
+  font-size: 3.1rem;
+  width: 42%;
 }
 .card #humid input {
-  width: 30%;
+  width: 32%;
 }
 .card #precip input {
-  width: 35%;
+  width: 37%;
+}
+
+.localStyle {
+  border-bottom: 2px dotted black;
+  cursor: pointer;
 }
 
 select, option {
@@ -152,12 +198,28 @@ option {
 option:hover {
   background-color: hsl(0, 0%, 10%);
 }
+select:disabled {
+  opacity: 1;
+}
+
+.correct {
+  background-color: hsla(120, 100%, 50%, 0.3);
+}
+.incorrect {
+  background-color: hsla(0, 100%, 50%, 0.3);
+}
+.partial {
+  background-color: hsla(61, 100%, 50%, 0.3);
+}
+*[disabled] {
+  border-bottom: none;
+}
 
 .card #high label {
-  font-size: 4rem;
+  font-size: 3.3rem;
 }
 .card #low label {
-  font-size: 3.5rem;
+  font-size: 3.1rem;
 }
 
 input:active {
@@ -167,48 +229,51 @@ input:active {
 .deactivated {
   background: linear-gradient(189deg, hsl(256, 74%, 41%), hsl(210, 97%, 69%));
 }
+.completed {
+  background: linear-gradient(189deg, hsl(236, 60%, 47%), hsl(44, 100%, 59%));
+}
+
+.tooltip {
+  background-color: rgba(0, 0, 0, 0.85);
+  border: 2px solid black;
+  color: white;
+  padding: 5px;
+  border-radius: 4px;
+  z-index: 1000;
+  font-size: 1.75rem;
+}
+
+.toggle-switch {
+  position: fixed;
+  right: 0;
+}
+
+.slider {
+  background-color: orange;
+  transition: ease 0.5s;
+}
+.slider:hover {
+  background-color: hsl(39, 100%, 35%);
+}
+.on {
+  background-color: aqua;
+}
+.on:hover {
+  background-color: hsl(180, 100%, 35%);
+}
 
 h1 {
-  font-size: 3.5rem;
+  font-size: 5rem;
   margin-top: 0;
   margin-bottom: 25px;
 }
 
 p {
-  font-size: 1.5rem;
+  font-size: 2.25rem;
   margin: 5px 0;
 }
-img {
-  margin: 15px 0;
-}
-.cityDisplay {
-  font-size: 3.5rem;
-  color: hsla(0, 0%, 0%, 0.75);
-  margin-bottom: 25px;
-}
-.tempDisplay {
-  font-size: 3.5rem;
-  color: hsla(0, 0%, 0%, 0.75);
-  margin-bottom: 0px;
-}
-.feelsLike {
-  font-style: italic;
-  font-size: 2.5rem;
-  color: hsla(0, 0%, 0%, 0.4);
-  margin-top: -10px;
-  margin-bottom: 25px;
-}
-.humidityDisplay {
-  margin-bottom: 25px;
-}
-.descDisplay {
-  font-style: italic;
-  font-size: 2rem;
-}
+
 .weatherImg {
-  width: 65%;
-}
-.errorDisplay {
-  font-size: 2.5rem;
-  color: hsla(0, 0%, 0%, 0.75);
+  width: 196px;
+  margin: 15px 0;
 }
