@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-export default function Tooltip({ location }) {
+export default function Tooltip({ location, numaricLocation }) {
     const [visible, setVisible] = useState(false);
     const [position, setPosition] = useState({ x: 0, y: 0 });
     const [date, setDate] = useState(null);
@@ -11,6 +11,7 @@ export default function Tooltip({ location }) {
         date.setDate(date.getDate() - 1 + dayOffset);
         date.setUTCHours(12, 0, 0, 0);
         setDate(date);
+        
     }, [])
 
     function handleMouseIn(e) {
@@ -30,14 +31,17 @@ export default function Tooltip({ location }) {
     return (
         <>
             <p>
-                What was the forecast for {date && date.toUTCString()} in <span
+                What was the forecast on {date && date.toUTCString()} in <span
                     onMouseEnter={handleMouseIn}
                     onMouseMove={handleMouseMove}
                     onMouseLeave={handleMouseOut}
                     className='localStyle'>
-                    {location ? location[location.length - 2].formatted_address : ""}
+                    {location ? location[location.length - 2] : ""}
                 </span>?
             </p>
+            <a href={`https://maps.google.com/?q=${numaricLocation[0]},${numaricLocation[1]}`} target="_blank">
+                Where is that on a map?
+            </a>
             { visible &&
                 <div className='tooltip' style={{
                     position: 'absolute',
@@ -46,7 +50,7 @@ export default function Tooltip({ location }) {
                 }}>
                     More specifically: {location.map((loc, i) => (
                         <div style={{fontSize: '1.5rem', color: 'hsl(0, 0%, 80%)'}} key = {i}>
-                            {loc.formatted_address}
+                            {loc}
                         </div>
                     ))}
                 </div>

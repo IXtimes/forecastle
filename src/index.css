@@ -96,7 +96,7 @@ button:hover {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  transition: ease 1s 0s;
+  /*transition: ease 1s 0s;*/
 }
 
 .resultsBlock {
@@ -159,11 +159,11 @@ button:hover {
   border-bottom: 2px solid;
 }
 .card #high input {
-  font-size: 3.75rem;
-  width: 47%;
+  font-size: 3rem;
+  width: 35%;
 }
 .card #low input {
-  font-size: 3.1rem;
+  font-size: 2.25rem;
   width: 42%;
 }
 .card #humid input {
@@ -216,10 +216,10 @@ select:disabled {
 }
 
 .card #high label {
-  font-size: 3.3rem;
+  font-size: 3rem;
 }
 .card #low label {
-  font-size: 3.1rem;
+  font-size: 2.25rem;
 }
 
 input:active {
@@ -273,7 +273,44 @@ p {
   margin: 5px 0;
 }
 
+a {
+  font-size: 1.5rem;
+  color: dodgerblue;
+}
+a:active {
+  color: dodgerblue;
+}
+
+.prompt {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .weatherImg {
   width: 196px;
   margin: 15px 0;
+}
+
+/* Smaller desktop resizing, slight adjustment to how elements are arranged*/
+@media (max-width: 1700px) {
+  .card {
+    flex-direction: row;
+    align-items: center;
+    padding: 30px;
+    margin: 10px;
+    box-shadow: 2px 2px 5px hsla(0, 0%, 0%, 0.5);
+    width: clamp(90%, 300px, 300px);
+    height: 20vh;
+    border-radius: 10px;
+  }
+
+  .gameCards {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    height: 135vh;
+  }
 }
