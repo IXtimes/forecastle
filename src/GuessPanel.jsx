@@ -1,12 +1,13 @@
-import React, {useState, useEffect, useRef} from 'react'
+import React, { useState, useEffect, useRef } from 'react'
+import { useMediaQuery } from 'react-responsive';
 
 import ImageDropdown from "./ImageDropdown"
 
 export default function GuessPanel({ active, activateNext, i, accepts, setAccepts, weatherId, weatherStats, isFah }) {
     // Stateful variables
     const [weather, setWeather] = useState("Atmospheric");
-    const [high, setHigh] = useState(0);
-    const [low, setLow] = useState(0);
+    const [high, setHigh] = useState(isFah ? 0 : 32);
+    const [low, setLow] = useState(isFah ? 0 : 32);
     const [humidity, setHumidity] = useState(0);
     const [precipitation, setPrecipitation] = useState(0);
     const [enabled, setEnabled] = useState(active);
@@ -18,6 +19,9 @@ export default function GuessPanel({ active, activateNext, i, accepts, setAccept
     const lowNumBox = useRef(null);
     const humidNumBox = useRef(null);
     const precipNumBox = useRef(null);
+
+    // Check if the device is mobile in width, where we will truncate
+    const isMobile = useMediaQuery({ query: `(max-width: 767px)` });
 
     // Update enabled based on changed active state
     useEffect(() => {
@@ -144,7 +148,7 @@ export default function GuessPanel({ active, activateNext, i, accepts, setAccept
                     <ImageDropdown setSelected={setWeather} active={enabled} ref={weatherImage} />
                 </div>
                 <div className="dataBox">
-                    <p>Temperature:</p>
+                    <p>{isMobile ? "Temp" : "Temperature"}:</p>
                     <div ref={highNumBox} className="numBox" id="high">
                         <label>{highLow ? (highLow[0] === "higher" ? "↑" : (highLow[0] === "lower" ? "↓" : "")) : ""} </label>
                         <label>H: </label>
@@ -159,13 +163,13 @@ export default function GuessPanel({ active, activateNext, i, accepts, setAccept
                     </div>
                 </div>
                 <div className="dataBox">
-                    <p>Humidity:</p>
+                    <p>{isMobile ? "Humid" : "Humidity"}:</p>
                     <div ref={humidNumBox} className="numBox" id="humid">
                         <label>{highLow ? (highLow[2] === "higher" ? "↑" : (highLow[2] === "lower" ? "↓" : "")) : ""} </label>
                         <input disabled={enabled != "true" ? 'true' : ''} onChange={e => (e.target.value >= 0 && e.target.value <= 100) ? setHumidity(e.target.value) : e.target.value = humidity} value={humidity} type="number"/>
                         <label>%</label>
                     </div>
-                    <p>Precipitation:</p>
+                    <p>{isMobile ? "Precip" : "Precipitation"}:</p>
                     <div ref={precipNumBox} className="numBox" id="precip">
                         <label>{highLow ? (highLow[3] === "higher" ? "↑" : (highLow[3] === "lower" ? "↓" : "")) : ""} </label>
                         <input disabled={enabled != "true" ? 'true' : ''} onChange={e => setPrecipitation(e.target.value)} value={precipitation} type="number" min="0" max="99.9"/>
@@ -174,7 +178,7 @@ export default function GuessPanel({ active, activateNext, i, accepts, setAccept
                 </div>
                 {enabled == "true" &&
                     <button onClick={submitForcastAnswer}>
-                        Submit
+                        {isMobile ? "Sub." : "Submit"}
                     </button>
                 }
                 </>

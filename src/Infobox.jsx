@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-export default function Infobox({ updateStatus, context, accepts, winState, weatherId, weatherStats, loc, isFah, dayIndex }) {
+export default function Infobox({ updateStatus, context, accepts, weatherId, weatherStats, loc, isFah, dayIndex }) {
     const [date, setDate] = useState(null);
 
     useEffect(() => {
@@ -58,9 +58,12 @@ export default function Infobox({ updateStatus, context, accepts, winState, weat
     return (
         <div className="grayOut">
             <div className="infoCard">
-                <button className="xButton" onClick={() => updateStatus(false)}>
+                {
+                    (context !== "attempted") &&
+                    <button className="xButton" onClick={() => updateStatus(false)}>
                     X
-                </button>
+                    </button>
+                }
                 {(context === "info") && 
                     <>
                         <h1>Welcome to Forecastle</h1>
@@ -70,12 +73,12 @@ export default function Infobox({ updateStatus, context, accepts, winState, weat
                             <p>Every day, we gather the weather information for a random place on the planet that was observed yesterday. The goal is to guess what the weather conditions where for that place... yesterday. <br/><br/>
                                 (Ik its not a "forecast" per say but run with me).<br /><br />
                                 You will get 5 guesses to predict what the weather condition was (captured at about midnight CST) as well as that day's temperature high and low, the total precipitation, and the average humidity observed throughout the day. Easy right?<br /><br />
-                                By the way, you can toggle between imperial and metric units using the °F toggle on the right, in case those units are more familiar for you!
+                            By the way, you can toggle between imperial and metric units using the {isFah ? '°F' : '°C'} toggle on the right, in case those units are more familiar for you!
                             </p>
                             <h2>Scoring</h2>
                             <p>After you have made your guess for these estimates and press submit, you will be graded based on how close you were to the ACTUAL observed weather statistics. The highlight key is as follows:<br /><br/>
                             🟩 - Your guess is <em>close</em> enough to the actual value that its correct. You don't need to change this guess going forward.<br/><span className="detailerText">This may not be the <em>exact</em> value recorded, but its meteorology. Close enough is good enough :).</span><br/>
-                            🟨 - Your guess is nearing the actual value, but its still a little too far off to be correct.<br/> <span className="detailerText">For temperatures this means within about 10°F (3°C), humidity about 10%, and precipitation 0.1" (3mm) within the actual value!</span><br/>
+                            🟨 - Your guess is nearing the actual value, but its still a little too far off to be correct.<br/> <span className="detailerText">For temperatures this means within about {isFah ? '10°F' : '3°C'}, humidity about 10%, and precipitation {isFah ? '0.1"' : '3mm'} within the actual value!</span><br/>
                             🟥 - Your guess is very far off from the actual value, be more experimental with the next one!<br/><span className="detailerText">For weather conditions, anything BUT the correct answer is marked 🟥, so just because it may be marked wrong doesn't mean you aren't close!</span><br/><br/>
 
                                 In addition to your guess being highlighted, if it was marked as 🟨 or 🟥, then you are also given an arrow directing your next guess:<br/>
@@ -87,7 +90,8 @@ export default function Infobox({ updateStatus, context, accepts, winState, weat
                                 But, if you are struggling there is also a link to where the location is on Google maps.
                             </p>
                             <h2>Cookies</h2>
-                            <p>This site uses cookies to check if you have completed today's puzzle as well as save your score. Nothing else is saved!</p>
+                            <p>This site only uses cookies to store if you have completed today's puzzle, your unit preference, and the results of today's puzzle. We DON'T use your cookies beyond these simple features!
+                            </p>
                     </div>
                     </>
                 }
@@ -119,7 +123,7 @@ export default function Infobox({ updateStatus, context, accepts, winState, weat
                 {(context === "lose") && 
                     <>
                         <h1>Better Luck Next Time!</h1>
-                        <h4>You weren't able to predict yesterday's forecast in less than 5 predictions!</h4>
+                        <h4>You weren't able to predict yesterday's forecast within 5 predictions!</h4>
                         <div className="textContent">
                             <h2>Actual Data</h2>
                             <p>It was {getWeatherDescription()} in {loc ? loc[loc.length - 2] : ""} on {date && date.toDateString()}!</p>
@@ -127,6 +131,32 @@ export default function Infobox({ updateStatus, context, accepts, winState, weat
                             <p>Throughout the day the humidity, on average, was {Math.round(weatherStats.humidity)}%.</p>
                             <p>The overall precipitation measured throughout the day was {isFah ? Math.round(100 * (weatherStats.precipitation / 25.4)) / 100.0 : Math.round(10 * weatherStats.precipitation) / 10.0}{isFah ? '"' : "mm"}.</p>
                             <p><br /><br /><br />Maybe you will have better luck tomorrow?</p>
+                            <h2><br /><br />Results</h2>
+                        <p>If you want a trendy grid representing your score today to share with your friends here you go!:</p>
+                        <div className="scoreGrid">
+                            <div>{stateToEmoji(accepts[0][0])}     {stateToEmoji(accepts[1][0])}     {stateToEmoji(accepts[2][0])}     {stateToEmoji(accepts[3][0])}     {stateToEmoji(accepts[4][0])}</div>
+                            <div>{stateToEmoji(accepts[0][1])}     {stateToEmoji(accepts[1][1])}     {stateToEmoji(accepts[2][1])}     {stateToEmoji(accepts[3][1])}     {stateToEmoji(accepts[4][1])}</div>
+                            <div>{stateToEmoji(accepts[0][2])}     {stateToEmoji(accepts[1][2])}     {stateToEmoji(accepts[2][2])}     {stateToEmoji(accepts[3][2])}     {stateToEmoji(accepts[4][2])}</div>
+                            <div>{stateToEmoji(accepts[0][3])}     {stateToEmoji(accepts[1][3])}     {stateToEmoji(accepts[2][3])}     {stateToEmoji(accepts[3][3])}     {stateToEmoji(accepts[4][3])}</div>
+                            <div>{stateToEmoji(accepts[0][4])}     {stateToEmoji(accepts[1][4])}     {stateToEmoji(accepts[2][4])}     {stateToEmoji(accepts[3][4])}     {stateToEmoji(accepts[4][4])}</div>
+                        </div>
+                        <p>Just dont forget to tell them about Forecastle :)</p>
+                        <p><br /><br /><br />Before you go, you might like some of my other projects at <a href="https://www.ixtimes.net">ixtimes.net</a>! Give them a try if you enjoyed :)</p>
+                        </div>
+                    </>
+                }
+                
+                {(context === "attempted" && loc) && 
+                    <>
+                        <h1>Looks like you've already played today's puzzle!</h1>
+                        <h4>Since you already set a score, you will have to wait until tomorrow to set a new one!</h4>
+                        <div className="textContent">
+                            <h2>Actual Data</h2>
+                            <p>It was {getWeatherDescription()} in {loc ? loc[loc.length - 2] : ""} on {date && date.toDateString()}!</p>
+                            <p>The high that day was {isFah ? (Math.round((weatherStats.temp_max - 273.15) * (9 / 5) + 32)) : (Math.round(weatherStats.temp_max - 273.15))}{isFah ? "°F" : "°C"} and the low was {isFah ? Math.round((weatherStats.temp_min - 273.15) * (9 / 5) + 32) : Math.round(weatherStats.temp_min - 273.15)}{isFah ? "°F" : "°C"}.</p>
+                            <p>Throughout the day the humidity, on average, was {Math.round(weatherStats.humidity)}%.</p>
+                            <p>The overall precipitation measured throughout the day was {isFah ? Math.round(100 * (weatherStats.precipitation / 25.4)) / 100.0 : Math.round(10 * weatherStats.precipitation) / 10.0}{isFah ? '"' : "mm"}.</p>
+                            <p><br /><br /><br />Try again tomorrow!</p>
                             <h2><br /><br />Results</h2>
                         <p>If you want a trendy grid representing your score today to share with your friends here you go!:</p>
                         <div className="scoreGrid">

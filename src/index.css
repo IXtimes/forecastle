@@ -7,7 +7,7 @@
 body {
   font-family: pixul-brush, sans-serif;
   color: hsl(0, 0%, 0%);
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 h1 {
@@ -47,6 +47,7 @@ body {
 }
 .forecastleBody {
   margin: 10px;
+  min-height: 90vh;
 }
 
 input[type='number']::-webkit-inner-spin-button,
@@ -85,7 +86,7 @@ button:hover {
   align-items: center;
   justify-content: center;
   text-align: center;
-  height: 80vh;
+  height: fit-content;
 }
 
 .card {
@@ -94,7 +95,8 @@ button:hover {
   margin: 10px;
   box-shadow: 2px 2px 5px hsla(0, 0%, 0%, 0.5);
   width: clamp(15%, 300px, 300px);
-  height: 90%;
+  min-height: 60vh;
+  height: fit-content;
   border-radius: 10px;
   display: flex;
   flex-direction: column;
@@ -245,6 +247,10 @@ input:active {
   border-radius: 4px;
   z-index: 1000;
   font-size: 1.75rem;
+}
+.tooltipItems {
+  font-size: 1.5rem;
+  color: hsl(0, 0%, 80%);
 }
 
 .toggle-switch {
@@ -420,8 +426,10 @@ footer p, footer a {
     padding: 30px;
     margin: 10px;
     box-shadow: 2px 2px 5px hsla(0, 0%, 0%, 0.5);
-    width: clamp(90%, 300px, 300px);
-    height: 20vh;
+    width: fit-content;
+    min-width: 90vw;
+    min-height: 20vh;
+    height: fit-content;
     border-radius: 10px;
   }
 
@@ -431,6 +439,362 @@ footer p, footer a {
     align-items: center;
     justify-content: center;
     text-align: center;
-    height: 135vh;
+    height: fit-content;
   }
+}
+
+/* Phone styling*/
+@media (max-width: 1000px) {
+  body {
+    margin: 0;
+    width: 100%;
+    padding: 0;
+    overflow-x: hidden;
+  }
+  button {
+    padding: 15px 10px;
+    font-size: .75rem;
+    background-color: hsl(122, 39%, 50%);
+    color: white;
+    border: none;
+    border-radius: 5px;
+  }
+  button:hover {
+    background-color: hsl(122, 39%, 40%);
+  }
+
+  .gameCards {
+    height: auto;
+    padding: 10px 0;
+  }
+
+  .card {
+    background: linear-gradient(189deg, hsl(210, 100%, 75%), hsl(40, 100%, 75%));
+    padding: 4% 2%;
+    margin: 1% 0%;
+    width: 95vw;
+    box-shadow: 2px 2px 5px hsla(0, 0%, 0%, 0.5);
+    border-radius: 10px;
+  }
+
+  .resultsBlock {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .horizontalCard {
+    background: linear-gradient(189deg, hsl(210, 100%, 75%), hsl(40, 100%, 75%));
+    padding: 4% 2%;
+    margin: 1% 0%;
+    box-shadow: 2px 2px 5px hsla(0, 0%, 0%, 0.5);
+    width: 95vw;
+    border-radius: 10px;
+  }
+  .horizontalCard * {
+    color: white;
+  }
+  .horizontalCard #high *{
+    font-size: 2rem;
+  }
+  .horizontalCard #low *{
+    font-size: 1.5rem;
+  }
+  .scoreGrid {
+    font-size: 1rem;
+  }
+
+  .card .dataBox {
+    margin: 0px 0;
+  }
+  .card .dataBox * {
+    color: white;
+    font-size: 1.25rem;
+  }
+  .card .dataBox select {
+    font-size: 1.1rem;
+  }
+  .card #high *, .card #humid *, .card #precip *{
+    color: hsl(0, 0%, 100%);
+  }
+  .card #low * {
+    color: hsl(0, 0%, 93%);
+  }
+
+  .card .numBox {
+    margin: 10px 0px;
+  }
+
+  .card .numBox input {
+    background-color: transparent;
+    border: none;
+    text-align: right;
+    width: 50%;
+  }
+  .card .numBox input:not(:disabled) {
+    border-bottom: 2px solid;
+  }
+  .card #high input {
+    font-size: 1.75rem;
+    width: 35%;
+  }
+  .card #low input {
+    font-size: 1.5rem;
+    width: 42%;
+  }
+  .card #humid input {
+    width: 32%;
+  }
+  .card #precip input {
+    width: 37%;
+  }
+
+  .localStyle {
+    border-bottom: 2px dotted black;
+    cursor: pointer;
+  }
+
+  select, option {
+    background-color: transparent;
+    border: none;
+    outline: none; 
+    appearance: none; 
+    -webkit-appearance: none; 
+    -moz-appearance: none; 
+    padding: 0; 
+    margin: 0;
+    width: auto; 
+    box-sizing: border-box;
+    border-bottom: 2px solid;
+    cursor:pointer;
+  }
+  option {
+    background-color: hsl(0, 0%, 20%);
+  }
+  option:hover {
+    background-color: hsl(0, 0%, 10%);
+  }
+  select:disabled {
+    opacity: 1;
+  }
+
+  .correct {
+    background-color: hsla(120, 100%, 50%, 0.3);
+  }
+  .incorrect {
+    background-color: hsla(0, 100%, 50%, 0.3);
+  }
+  .partial {
+    background-color: hsla(61, 100%, 50%, 0.3);
+  }
+  *[disabled] {
+    border-bottom: none;
+  }
+
+  .card #high label {
+    font-size: 1.65rem;
+  }
+  .card #low label {
+    font-size: 1.5rem;
+  }
+
+  input:active {
+    background-color: rgba(0, 0, 0, 0.05);
+  }
+
+  .deactivated {
+    background: linear-gradient(189deg, hsl(256, 74%, 41%), hsl(210, 97%, 69%));
+  }
+  .completed {
+    background: linear-gradient(189deg, hsl(236, 60%, 47%), hsl(44, 100%, 59%));
+  }
+
+  .tooltip {
+    background-color: rgba(0, 0, 0, 0.85);
+    border: 2px solid black;
+    color: white;
+    padding: 5px;
+    border-radius: 4px;
+    z-index: 1000;
+    font-size: 1rem;
+  }
+  .tooltipItems {
+    font-size: 1rem;
+    color: hsl(0, 0%, 80%);
+  }
+
+  .toggle-switch {
+    position: fixed;
+    right: 0;
+  }
+
+  .slider {
+    background-color: orange;
+    font-size: 1.5rem;
+    width: 50px;
+    transition: ease 0.5s;
+  }
+  .slider:hover {
+    background-color: hsl(39, 100%, 35%);
+  }
+  .on {
+    background-color: aqua;
+  }
+  .on:hover {
+    background-color: hsl(180, 100%, 35%);
+  }
+
+  .grayOut {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100vw;
+    height: 100vh;
+    background-color: hsla(0, 0%, 39%, 0.438);
+  }
+
+  .infoCard {
+    padding: 15px;
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 75vw;
+    height: 85vh;
+    background-color: white;
+    border-radius: 5px;
+    overflow: hidden;
+    animation: fadeInDown 2s -.6s;
+  }
+  .infoCard .textContent {
+    overflow-y: scroll;
+  }
+  .infoCard h1 {
+    font-size: 1.5rem;
+    margin: 5px 15px;
+    text-align: center;
+  }
+  .infoCard h2 {
+    font-size: 1.25rem;
+    margin: 5px 0;
+    font-weight: normal;
+    text-align: left;
+  }
+  .infoCard h4 {
+    font-size: 1.1rem;
+    margin: 5px 0;
+    font-weight: normal;
+    text-align: center;
+    color: rgb(58, 58, 58);
+  }
+  .infoCard p {
+    font-size: .9rem;
+    margin: 5px 0;
+    font-weight: normal;
+    text-align: left;
+    color: rgb(58, 58, 58);
+  }
+  .infoCard a {
+    font-size: .9rem;
+    margin: 5px 0;
+    font-weight: normal;
+    text-align: left;
+    color: rgb(58, 58, 58);
+  }
+  .detailerText {
+    color: rgb(190, 190, 190);
+  }
+
+  .xButton {
+    position: fixed;
+    top: 5px;
+    right: 5px;
+    background-color: rgba(255, 255, 255, 0);
+    color: black;
+    font-size: 1.5rem;
+  }
+  .xButton:hover {
+    background-color: rgba(169, 169, 169, 0.192);
+  }
+
+  .infoButton {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 50px;
+    height: 50px;
+    background-color: rgb(55, 108, 255);
+    border-radius: 50px;
+    padding: 13px 20px;
+    margin: 10px;
+    color: white;
+    font-size: 1.5rem;
+  }
+  .infoButton:hover {
+    background-color: hsl(224, 100%, 51%);
+  }
+
+  h1 {
+    font-size: 3rem;
+    margin-top: 0;
+    margin-bottom: 5px;
+  }
+
+  p {
+    font-size: 1.25rem;
+    margin: 5px 0;
+  }
+
+  a {
+    font-size: 1rem;
+    color: dodgerblue;
+  }
+  a:active {
+    color: dodgerblue;
+  }
+
+  .prompt {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .weatherImg {
+    width: 96px;
+    margin: 15px 0;
+  }
+
+  footer {
+    margin-inline-start: 0;
+    background-color: hsl(0, 0%, 90%);
+    box-shadow: 0px -10px 12px rgba(0, 0, 0, .5);
+    padding: 5px;
+  }
+  footer p, footer a {
+    font-size: 1rem;
+    text-align: left;
+    color:hsl(0, 0%, 70%)
+  }
+}
+
+
+@media (max-width: 400px) {
+  .card #high label {
+    font-size: 1.1rem;
+  }
+  .card #low label {
+    font-size: 1.05rem;
+  }
+  .card #high input {
+    font-size: 1.1rem;
+    width: 25%;
+  }
+  .card #low input {
+    font-size: 1.05rem;
+    width: 25%;
+  }
+
 }

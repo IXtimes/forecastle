@@ -47,7 +47,7 @@ export default function Tooltip({ location, numaricLocation, dayIndex}) {
                     top: `${position.y + 3}px`,
                 }}>
                     More specifically: {location.map((loc, i) => (
-                        <div style={{fontSize: '1.5rem', color: 'hsl(0, 0%, 80%)'}} key = {i}>
+                        <div className='tooltipItems' key = {i}>
                             {loc}
                         </div>
                     ))}

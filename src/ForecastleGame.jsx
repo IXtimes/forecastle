@@ -4,12 +4,16 @@ import Tooltip from './Tooltip';
 import ToggleSwitch from './ToggleSwitch';
 import Results from './Results';
 import Infobox from './Infobox';
+import { useCookies } from 'react-cookie';
 
 export default function ForecastleGame() { 
+    const [fahCookie, setFahCookie] = useCookies(['isFah']);
+    const [playedCookie, setPlayedCookie] = useCookies(['played']);
+    const [resultsCookie, setResultsCookie] = useCookies(['results']);
+
     const [location, setLocation] = useState(null);
     const [weather, setWeather] = useState(0);
     const [stats, setStats] = useState(null);
-    const [isFah, setIsFah] = useState(true);
     const [numricLocation, setNumricLocation] = useState([0.0, 0.0]);
     const [actives, setActives] = useState(["true", "false", "false", "false", "false"]);
     const [activeIndex, setActiveIndex] = useState(0);
@@ -26,8 +30,21 @@ export default function ForecastleGame() {
     const [dailyRow, setDailyRow] = useState(0);
     const [infoContext, setInfoContext] = useState("info");
     const passKey = import.meta.env.VITE_FORECASTLE_PASSKEY;
+    const [isFah, setIsFah] = useState(fahCookie.isFah);
 
     useEffect(() => {
+        // Load in toggle cookie and set the toggle to that state
+        if (!fahCookie.isFah) {
+            setFahCookie('isFah', 'false');
+        }
+        if (!playedCookie.played) {
+            setPlayedCookie('played', 'false');
+        }
+
+        console.log(resultsCookie.played);
+
+        console.log(resultsCookie.results);
+        
         // Get today's Forecastle
         try {
             GetTodaysForecastle();
@@ -35,9 +52,22 @@ export default function ForecastleGame() {
             console.error(error);
         }
 
+        // If the playedCookie is true, show results and prevent from playing the game
+        if (playedCookie.played) {
+            setInfoContext("attempted");
+
+            console.log(resultsCookie.results);
+            setAccepts(resultsCookie.results);
+        }
+
         // Show info box
         setShowInfoBox(true);
     }, [])
+
+    useEffect(() => {
+        let date = new Date((1724395440) * 1000 + (dailyRow * 86400000));
+        setResultsCookie('results', accepts, {expires: date});
+    }, [accepts])
 
     async function GetTodaysForecastle() {
         // Make a call to my website to get today's forcast data (index is determined from days since first entry timestamp, Aug. 23, 2024 @ 01:44.00 CST)
@@ -65,6 +95,9 @@ export default function ForecastleGame() {
             setWinState(true);
             setInfoContext("win");
             setShowInfoBox(true);
+            let date = new Date((1724395440) * 1000 + (dailyRow * 86400000));
+            console.log(date);
+            setPlayedCookie('played', true, {expires: date});
 
             // Change all trues to locked
             let newActives = [...actives];
@@ -99,6 +132,9 @@ export default function ForecastleGame() {
             setWinState(false);
             setInfoContext("lose");
             setShowInfoBox(true);
+            let date = new Date((1724395440) * 1000 + (dailyRow * 86400000));
+            console.log(date);
+            setPlayedCookie('played', true, {expires: date});
 
             // Change all to locked
             let newActives = [...actives];
@@ -113,7 +149,7 @@ export default function ForecastleGame() {
         <>
             <button className='infoButton' onClick={() => { setShowInfoBox(true); setInfoContext("info")}}>i</button>
             {showInfoBox &&
-                <Infobox updateStatus={setShowInfoBox} context={infoContext} accepts={accepts} winState={winState} weatherId={weather} weatherStats={stats} loc={location} isFah={isFah} dayIndex={dailyRow} />
+                <Infobox updateStatus={setShowInfoBox} context={infoContext} accepts={accepts} weatherId={weather} weatherStats={stats} loc={location} isFah={isFah} dayIndex={dailyRow} />
             }
             <div className="prompt">
                 <Tooltip location={location} numaricLocation={numricLocation} dayIndex={dailyRow} />

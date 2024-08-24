@@ -1,4 +1,9 @@
+import { useMediaQuery } from 'react-responsive';
+
 export default function Results({ accepts, winState, weatherId, weatherStats, location, isFah }) {
+    // Check if the device is mobile in width, where we will truncate
+    const isMobile = useMediaQuery({ query: `(max-width: 767px)` });
+
     function getAcceptsAttempts() {
         // Use a variable to count the number of arrays in accepts whose values are not 'undeter'
         let length = 0;
@@ -45,41 +50,45 @@ export default function Results({ accepts, winState, weatherId, weatherStats, lo
     }
 
     return (
-        <div className="resultsBlock">
-            <p>{winState ? `Congradulations! You predicted yesterday's forecast in ${getAcceptsAttempts()} predictions:` : "You didn't get yesterday's forecast within 5 predictions... better luck tomorrow?"}</p>
-            <div className="horizontalCard">
-                <div className="dataBox">
-                    <p>{location ? location[location.length - 2] : ""}</p>
-                    <img src={getWeatherImage()} alt="" />
+        <>
+            { location &&
+                <div className="resultsBlock">
+                    <p>{winState ? `Congradulations! You predicted yesterday's forecast in ${getAcceptsAttempts()} predictions:` : "You didn't get yesterday's forecast within 5 predictions... better luck tomorrow?"}</p>
+                    <div className="horizontalCard">
+                        <div className="dataBox">
+                            <p>{location ? (isMobile ? location[location.length - 1] : location[location.length - 2]) : ""}</p>
+                            <img className="weatherImg" src={getWeatherImage()} alt="" />
+                        </div>
+                        <div className="dataBox">
+                            <p>{isMobile ? "Temp" : "Temperature"}:</p>
+                            <div className="numBox" id="high">
+                                <p>H: {isFah ? (Math.round((weatherStats.temp_max - 273.15) * (9 / 5) + 32)) : (Math.round(weatherStats.temp_max - 273.15))}{isFah ? "°F" : "°C"}</p>
+                            </div>
+                            <div className="numBox" id="low">
+                                <p>L: {isFah ? Math.round((weatherStats.temp_min - 273.15) * (9 / 5) + 32) : Math.round(weatherStats.temp_min - 273.15)}{isFah ? "°F" : "°C"}</p>
+                            </div>
+                        </div>
+                        <div className="dataBox">
+                            <p>{isMobile ? "Humid" : "Humidity"}:</p>
+                            <div className="numBox" id="humid">
+                                <p>{Math.round(weatherStats.humidity)}%</p>
+                            </div>
+                            <p>{isMobile ? "Precip" : "Precipitation"}:</p>
+                            <div className="numBox" id="precip">
+                                <p>{isFah ? Math.round(100 * (weatherStats.precipitation / 25.4)) / 100.0 : Math.round(10 * weatherStats.precipitation) / 10.0}{isFah ? '"' : "mm"}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <p>Today's Score:</p>
+                    <div className="scoreGrid">
+                        <div>{stateToEmoji(accepts[0][0])}     {stateToEmoji(accepts[1][0])}     {stateToEmoji(accepts[2][0])}     {stateToEmoji(accepts[3][0])}     {stateToEmoji(accepts[4][0])}</div>
+                        <div>{stateToEmoji(accepts[0][1])}     {stateToEmoji(accepts[1][1])}     {stateToEmoji(accepts[2][1])}     {stateToEmoji(accepts[3][1])}     {stateToEmoji(accepts[4][1])}</div>
+                        <div>{stateToEmoji(accepts[0][2])}     {stateToEmoji(accepts[1][2])}     {stateToEmoji(accepts[2][2])}     {stateToEmoji(accepts[3][2])}     {stateToEmoji(accepts[4][2])}</div>
+                        <div>{stateToEmoji(accepts[0][3])}     {stateToEmoji(accepts[1][3])}     {stateToEmoji(accepts[2][3])}     {stateToEmoji(accepts[3][3])}     {stateToEmoji(accepts[4][3])}</div>
+                        <div>{stateToEmoji(accepts[0][4])}     {stateToEmoji(accepts[1][4])}     {stateToEmoji(accepts[2][4])}     {stateToEmoji(accepts[3][4])}     {stateToEmoji(accepts[4][4])}</div>
+                    </div>
                 </div>
-                <div className="dataBox">
-                    <p>Temperature:</p>
-                    <div className="numBox" id="high">
-                        <p>H: {isFah ? (Math.round((weatherStats.temp_max - 273.15) * (9 / 5) + 32)) : (Math.round(weatherStats.temp_max - 273.15))}{isFah ? "°F" : "°C"}</p>
-                    </div>
-                    <div className="numBox" id="low">
-                        <p>L: {isFah ? Math.round((weatherStats.temp_min - 273.15) * (9 / 5) + 32) : Math.round(weatherStats.temp_min - 273.15)}{isFah ? "°F" : "°C"}</p>
-                    </div>
-                </div>
-                <div className="dataBox">
-                    <p>Humidity:</p>
-                    <div className="numBox" id="humid">
-                        <p>{Math.round(weatherStats.humidity)}%</p>
-                    </div>
-                    <p>Precipitation:</p>
-                    <div className="numBox" id="precip">
-                        <p>{isFah ? Math.round(100 * (weatherStats.precipitation / 25.4)) / 100.0 : Math.round(10 * weatherStats.precipitation) / 10.0}{isFah ? '"' : "mm"}</p>
-                    </div>
-                </div>
-            </div>
-            <p>Today's Score:</p>
-            <div className="scoreGrid">
-                <div>{stateToEmoji(accepts[0][0])}     {stateToEmoji(accepts[1][0])}     {stateToEmoji(accepts[2][0])}     {stateToEmoji(accepts[3][0])}     {stateToEmoji(accepts[4][0])}</div>
-                <div>{stateToEmoji(accepts[0][1])}     {stateToEmoji(accepts[1][1])}     {stateToEmoji(accepts[2][1])}     {stateToEmoji(accepts[3][1])}     {stateToEmoji(accepts[4][1])}</div>
-                <div>{stateToEmoji(accepts[0][2])}     {stateToEmoji(accepts[1][2])}     {stateToEmoji(accepts[2][2])}     {stateToEmoji(accepts[3][2])}     {stateToEmoji(accepts[4][2])}</div>
-                <div>{stateToEmoji(accepts[0][3])}     {stateToEmoji(accepts[1][3])}     {stateToEmoji(accepts[2][3])}     {stateToEmoji(accepts[3][3])}     {stateToEmoji(accepts[4][3])}</div>
-                <div>{stateToEmoji(accepts[0][4])}     {stateToEmoji(accepts[1][4])}     {stateToEmoji(accepts[2][4])}     {stateToEmoji(accepts[3][4])}     {stateToEmoji(accepts[4][4])}</div>
-            </div>
-        </div>
+                }
+            </>
     )
 }
