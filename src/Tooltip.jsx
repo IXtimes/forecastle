@@ -1,18 +1,16 @@
 import React, { useState, useEffect } from 'react';
 
-export default function Tooltip({ location, numaricLocation }) {
+export default function Tooltip({ location, numaricLocation, dayIndex}) {
     const [visible, setVisible] = useState(false);
     const [position, setPosition] = useState({ x: 0, y: 0 });
     const [date, setDate] = useState(null);
-    const dayOffset = 0;
 
     useEffect(() => {
-        let date = new Date();
-        date.setDate(date.getDate() - 1 + dayOffset);
+        let date = new Date((1724395440 - 86400 * 2) * 1000 + (dayIndex * 86400000));
         date.setUTCHours(12, 0, 0, 0);
         setDate(date);
         
-    }, [])
+    }, [dayIndex])
 
     function handleMouseIn(e) {
         setVisible(true);
@@ -31,7 +29,7 @@ export default function Tooltip({ location, numaricLocation }) {
     return (
         <>
             <p>
-                What was the forecast on {date && date.toUTCString()} in <span
+                What was the forecast on {date && date.toDateString()} in <span
                     onMouseEnter={handleMouseIn}
                     onMouseMove={handleMouseMove}
                     onMouseLeave={handleMouseOut}

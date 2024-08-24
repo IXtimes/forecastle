@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { fromLatLng, setKey } from 'react-geocode';
-import { XORShift } from 'random-seedable';
 import GuessPanel from './GuessPanel';
 import Tooltip from './Tooltip';
 import ToggleSwitch from './ToggleSwitch';
 import Results from './Results';
+import Infobox from './Infobox';
 
 export default function ForecastleGame() { 
     const [location, setLocation] = useState(null);
@@ -23,6 +22,9 @@ export default function ForecastleGame() {
     ]);
     const [gameOver, setGameOver] = useState(false);
     const [winState, setWinState] = useState(false);
+    const [showInfoBox, setShowInfoBox] = useState(false);
+    const [dailyRow, setDailyRow] = useState(0);
+    const [infoContext, setInfoContext] = useState("info");
     const passKey = import.meta.env.VITE_FORECASTLE_PASSKEY;
 
     useEffect(() => {
@@ -32,15 +34,19 @@ export default function ForecastleGame() {
         } catch (error) {
             console.error(error);
         }
+
+        // Show info box
+        setShowInfoBox(true);
     }, [])
 
     async function GetTodaysForecastle() {
         // Make a call to my website to get today's forcast data (index is determined from days since first entry timestamp, Aug. 23, 2024 @ 01:44.00 CST)
         let date = new Date();
         let unixTimestamp = Math.floor(date.getTime() / 1000);
-        let dailyRow = Math.floor((unixTimestamp - 1724395440) / 86400) + 1;
+        let dailyIndex = Math.floor((unixTimestamp - 1724395440) / 86400) + 1;
+        setDailyRow(dailyIndex);
         const response = await
-            fetch(`https://ixtimes.net/api/forecastle.php?id=${dailyRow}&passkey=${passKey}`);
+            fetch(`https://ixtimes.net/api/forecastle.php?id=${dailyIndex}&passkey=${passKey}`);
         
         if (!response.ok)
             throw new Error("Could not fetch weather data");
@@ -57,6 +63,8 @@ export default function ForecastleGame() {
         if (winningState) {
             setGameOver(true);
             setWinState(true);
+            setInfoContext("win");
+            setShowInfoBox(true);
 
             // Change all trues to locked
             let newActives = [...actives];
@@ -89,6 +97,8 @@ export default function ForecastleGame() {
         } else {
             setGameOver(true);
             setWinState(false);
+            setInfoContext("lose");
+            setShowInfoBox(true);
 
             // Change all to locked
             let newActives = [...actives];
@@ -101,8 +111,12 @@ export default function ForecastleGame() {
 
     return (
         <>
+            <button className='infoButton' onClick={() => { setShowInfoBox(true); setInfoContext("info")}}>i</button>
+            {showInfoBox &&
+                <Infobox updateStatus={setShowInfoBox} context={infoContext} accepts={accepts} winState={winState} weatherId={weather} weatherStats={stats} loc={location} isFah={isFah} dayIndex={dailyRow} />
+            }
             <div className="prompt">
-                <Tooltip location={location} numaricLocation={numricLocation} />
+                <Tooltip location={location} numaricLocation={numricLocation} dayIndex={dailyRow} />
                 <ToggleSwitch labelOn="°F" labelOff="°C" toggle={isFah} setToggle={setIsFah}/>
             </div>
             <div className="gameCards">
