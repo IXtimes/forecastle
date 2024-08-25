@@ -1,7 +1,8 @@
 import React, { useState, useEffect, forwardRef} from 'react';
 
-export default forwardRef(({setSelected, active}, ref) => {
+export default forwardRef(({setSelected, active, selection}, ref) => {
     const [selectedImage, setSelectedImage] = useState('images/atmosphere.png');
+    const [selectedId, setSelectedId] = useState(1);
 
     const images = [
         { id: 1, url: 'images/atmosphere.png', label: 'Atmospheric' },
@@ -19,14 +20,22 @@ export default forwardRef(({setSelected, active}, ref) => {
         handleSelectImage(images[0]);
     }, [])
 
+    useEffect(() => {
+        console.log(selection);
+        console.log(images.find(img => img.label === selection));
+        handleSelectImage(images.find(img => img.label === selection));
+    }, [selection])
+
     const handleSelectImage = (image) => {
         setSelected(image.label);
         setSelectedImage(image.url);
+        setSelectedId(image.id);
+        console.log(image.label)
     };
 
     return (
         <div ref={ref}>
-            <select onChange={(e) => active == "true" ? handleSelectImage(images[e.target.selectedIndex]) : ""} disabled={ active != "true" ? "true" : ''}>
+            <select value={selectedId} onChange={(e) => active == "true" ? handleSelectImage(images[e.target.selectedIndex]) : ""} disabled={ active != "true" ? "true" : ''}>
                 {images.map((image) => (
                     <option key={image.id} value={image.id}>{image.label}</option>
                 ))}

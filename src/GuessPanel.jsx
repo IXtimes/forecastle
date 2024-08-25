@@ -3,7 +3,7 @@ import { useMediaQuery } from 'react-responsive';
 
 import ImageDropdown from "./ImageDropdown"
 
-export default function GuessPanel({ active, activateNext, i, accepts, setAccepts, weatherId, weatherStats, isFah }) {
+export default function GuessPanel({ active, activateNext, i, accepts, setAccepts, weatherId, weatherStats, isFah, lastGuess, setLastGuess }) {
     // Stateful variables
     const [weather, setWeather] = useState("Atmospheric");
     const [high, setHigh] = useState(isFah ? 0 : 32);
@@ -58,6 +58,17 @@ export default function GuessPanel({ active, activateNext, i, accepts, setAccept
             setPrecipitation(Math.round(10 * (precipitation * 25.4)) / 10);
         }
     }, [isFah]);
+
+    // If we are passed a new object describing what the last guess was, update the fields of this guess panel
+    useEffect(() => {
+        if (enabled != "complete" && lastGuess != null) {
+            setHigh(lastGuess.high);
+            setLow(lastGuess.low);
+            setPrecipitation(lastGuess.precip);
+            setHumidity(lastGuess.humid);
+            setWeather(lastGuess.weather);
+        }
+    }, [lastGuess])
 
     function submitForcastAnswer() {
         // Convert temperature stats from kelvin to either fahrenheit or celcius
@@ -114,6 +125,9 @@ export default function GuessPanel({ active, activateNext, i, accepts, setAccept
         // Update higherLower
         setHighLow(hL);
 
+        // Push guess information back to the last guess object
+        setLastGuess({ high: high, low: low, precip: precipitation, humid: humidity, weather: weather });
+
         // Report results and unlock next card if not completely correct
         activateNext(evalu.filter(state => state !== "correct").length === 0);
     }
@@ -145,7 +159,7 @@ export default function GuessPanel({ active, activateNext, i, accepts, setAccept
             {enabled != "false" &&
                 <>
                 <div className="dataBox">
-                    <ImageDropdown setSelected={setWeather} active={enabled} ref={weatherImage} />
+                    <ImageDropdown setSelected={setWeather} active={enabled} ref={weatherImage} selection={weather} />
                 </div>
                 <div className="dataBox">
                     <p>{isMobile ? "Temp" : "Temperature"}:</p>

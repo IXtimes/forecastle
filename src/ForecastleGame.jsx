@@ -31,6 +31,7 @@ export default function ForecastleGame() {
     const [infoContext, setInfoContext] = useState("info");
     const passKey = import.meta.env.VITE_FORECASTLE_PASSKEY;
     const [isFah, setIsFah] = useState(fahCookie.isFah);
+    const [lastGuess, setLastGuess] = useState(null);
 
     useEffect(() => {
         // Load in toggle cookie and set the toggle to that state
@@ -156,11 +157,11 @@ export default function ForecastleGame() {
                 <ToggleSwitch labelOn="°F" labelOff="°C" toggle={isFah} setToggle={setIsFah}/>
             </div>
             <div className="gameCards">
-                <GuessPanel active={actives[0]} i={0} activateNext={activateNext} accepts={accepts} setAccepts={setAccepts} weatherId={weather} weatherStats={stats} isFah={isFah}/>
-                <GuessPanel active={actives[1]} i={1} activateNext={activateNext} accepts={accepts} setAccepts={setAccepts} weatherId={weather} weatherStats={stats} isFah={isFah}/>
-                <GuessPanel active={actives[2]} i={2} activateNext={activateNext} accepts={accepts} setAccepts={setAccepts} weatherId={weather} weatherStats={stats} isFah={isFah}/>
-                <GuessPanel active={actives[3]} i={3} activateNext={activateNext} accepts={accepts} setAccepts={setAccepts} weatherId={weather} weatherStats={stats} isFah={isFah}/>
-                <GuessPanel active={actives[4]} i={4} activateNext={activateNext} accepts={accepts} setAccepts={setAccepts} weatherId={weather} weatherStats={stats} isFah={isFah}/>
+                <GuessPanel active={actives[0]} lastGuess={lastGuess} setLastGuess={setLastGuess} i={0} activateNext={activateNext} accepts={accepts} setAccepts={setAccepts} weatherId={weather} weatherStats={stats} isFah={isFah}/>
+                <GuessPanel active={actives[1]} lastGuess={lastGuess} setLastGuess={setLastGuess} i={1} activateNext={activateNext} accepts={accepts} setAccepts={setAccepts} weatherId={weather} weatherStats={stats} isFah={isFah}/>
+                <GuessPanel active={actives[2]} lastGuess={lastGuess} setLastGuess={setLastGuess} i={2} activateNext={activateNext} accepts={accepts} setAccepts={setAccepts} weatherId={weather} weatherStats={stats} isFah={isFah}/>
+                <GuessPanel active={actives[3]} lastGuess={lastGuess} setLastGuess={setLastGuess} i={3} activateNext={activateNext} accepts={accepts} setAccepts={setAccepts} weatherId={weather} weatherStats={stats} isFah={isFah}/>
+                <GuessPanel active={actives[4]} lastGuess={lastGuess} setLastGuess={setLastGuess} i={4} activateNext={activateNext} accepts={accepts} setAccepts={setAccepts} weatherId={weather} weatherStats={stats} isFah={isFah}/>
             </div>
             {gameOver &&
                 <Results accepts={accepts} winState={winState} weatherId={weather} weatherStats={stats} location={location} isFah={isFah}/>
