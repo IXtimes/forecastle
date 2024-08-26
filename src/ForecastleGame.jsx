@@ -41,10 +41,6 @@ export default function ForecastleGame() {
         if (!playedCookie.played) {
             setPlayedCookie('played', 'false');
         }
-
-        console.log(resultsCookie.played);
-
-        console.log(resultsCookie.results);
         
         // Get today's Forecastle
         try {
@@ -57,7 +53,6 @@ export default function ForecastleGame() {
         if (playedCookie.played) {
             setInfoContext("attempted");
 
-            console.log(resultsCookie.results);
             setAccepts(resultsCookie.results);
         }
 

@@ -17,6 +17,7 @@
     "react-cookie": "^7.2.0",
     "react-dom": "^18.3.1",
     "react-geocode": "^1.0.0-alpha.1",
+    "react-interactive": "^1.1.2",
     "react-responsive": "^10.0.0"
   },
   "devDependencies": {

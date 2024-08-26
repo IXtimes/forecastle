@@ -21,8 +21,6 @@ export default forwardRef(({setSelected, active, selection}, ref) => {
     }, [])
 
     useEffect(() => {
-        console.log(selection);
-        console.log(images.find(img => img.label === selection));
         handleSelectImage(images.find(img => img.label === selection));
     }, [selection])
 
@@ -30,7 +28,6 @@ export default forwardRef(({setSelected, active, selection}, ref) => {
         setSelected(image.label);
         setSelectedImage(image.url);
         setSelectedId(image.id);
-        console.log(image.label)
     };
 
     return (
