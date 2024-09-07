@@ -61,7 +61,7 @@ export default function GuessPanel({ active, activateNext, i, accepts, setAccept
 
     // If we are passed a new object describing what the last guess was, update the fields of this guess panel
     useEffect(() => {
-        if (enabled != "complete" && lastGuess != null) {
+        if (enabled != "complete" && enabled != "locked" && lastGuess != null) {
             setHigh(lastGuess.high);
             setLow(lastGuess.low);
             setPrecipitation(lastGuess.precip);
@@ -76,7 +76,6 @@ export default function GuessPanel({ active, activateNext, i, accepts, setAccept
         const statLow = isFah ? Math.round((weatherStats.temp_min - 273.15) * (9 / 5) + 32) : Math.round(weatherStats.temp_min - 273.15);
         // Also convert mm to in if need be
         const statPrecip = isFah ? Math.round(100 * (weatherStats.precipitation / 25.4)) / 100.0 : Math.round(10 * weatherStats.precipitation) / 10.0;
-        console.log(statPrecip, weatherStats.precipitation);
 
         // Calculate the differences between the actual values and the inputs
         const weatherDiff = idToWeatherString(weatherId) === weather;
