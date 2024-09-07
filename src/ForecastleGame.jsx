@@ -84,10 +84,48 @@ export default function ForecastleGame() {
 
         // From response, set stateful variables
         const json = await response.json();
-        setLocation(JSON.parse(json[0][3]));
+        setLocation(findAndPatchUnicode(JSON.parse(json[0][3])));
         setWeather(Number(json[0][1]));
         setStats(JSON.parse(json[0][2]));
         setNumricLocation([Number(json[0][4]), Number(json[0][5])]);
+    }
+
+    function getIndicesOf(searchStr, str, caseSensitive) {
+        var searchStrLen = searchStr.length;
+        if (searchStrLen == 0) {
+            return [];
+        }
+        var startIndex = 0, index, indices = [];
+        if (!caseSensitive) {
+            str = str.toLowerCase();
+            searchStr = searchStr.toLowerCase();
+        }
+        while ((index = str.indexOf(searchStr, startIndex)) > -1) {
+            indices.push(index);
+            startIndex = index + searchStrLen;
+        }
+        return indices;
+    }
+
+    function findAndPatchUnicode(strings) {
+        var results = [];
+        strings.forEach(str => { 
+            var unicodes = getIndicesOf("u00", str, true);
+            console.log(unicodes);
+            if (unicodes.length > 0)
+                unicodes.forEach(i => {
+                    var unicodeString = str.substring(i + 1, i + 5)
+                    var unicodeChar = String.fromCharCode(parseInt(unicodeString, 16));
+                    console.log(unicodeString, unicodeChar);
+                    str = str.replace("u" + unicodeString, unicodeChar);
+                    console.log(str);
+                })
+            results.push(str);
+        })
+        
+        console.log(results);
+
+        return results;
     }
 
     function activateNext(winningState) {
